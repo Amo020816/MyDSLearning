@@ -5,6 +5,7 @@
 #include "ArrayList.h"
 #include <algorithm>
 #include <iostream>
+#include <utility>
 
 template<typename T>
 ArrayList<T> :: ArrayList(int capacity)
@@ -25,18 +26,39 @@ ArrayList<T> :: ArrayList(const ArrayList<T> &rhs)
 }
 
 template<typename T>
+ArrayList<T>& ArrayList<T> ::  operator =(const ArrayList &rhs)
+{
+    ArrayList copy(rhs);
+    std::swap(*this, copy);
+    return *this;
+}
+
+template<typename T>
 ArrayList<T> :: ~ArrayList()
 {
     delete []arr;
     the_size = 0;
 }
 
+template<typename T>
+ArrayList<T> ::ArrayList(ArrayList<T> &&rhs)
+: arr(rhs.arr), K_CAPACITY(rhs.K_CAPACITY), the_size(rhs.the_size)
+{
+    rhs.arr = nullptr;
+    the_size = 0;
+}
 
 template<typename T>
-ArrayList<T>& ArrayList<T> ::  operator =(const ArrayList &rhs)
+ArrayList<T>& ArrayList<T>::operator=(ArrayList<T> &&rhs) noexcept
 {
-    ArrayList copy(rhs);
-    std::swap(*this, copy);
+    if (&rhs == this)
+        return *this;
+
+    delete []arr;
+    arr = std::exchange(rhs.arr, nullptr);
+    K_CAPACITY = std::exchange(rhs.K_CAPACITY, 0);
+    the_size = std::exchange(rhs.the_size, 0);
+
     return *this;
 }
 

@@ -12,11 +12,19 @@ public:
     // constructor
     ArrayList(int capacity);
 
+    // copy constructor
     ArrayList(const ArrayList&);
+
+    // copy assignment
+    ArrayList& operator=(const ArrayList&);
 
     ~ArrayList();
 
-    ArrayList& operator=(const ArrayList&);
+    // move constructor
+    ArrayList(ArrayList &&rhs);
+
+    // move assignment
+    ArrayList& operator=(ArrayList &&rhs) noexcept;
 
     inline int size() const
     {
@@ -53,7 +61,7 @@ public:
 
 private:
     T *arr;
-    const int K_CAPACITY;
+    int K_CAPACITY;
     int the_size;
 
 };
