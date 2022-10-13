@@ -32,9 +32,11 @@ public:
     class ConstIterator
     {
     public:
+
         ConstIterator() : current_(nullptr) {
-            // Empty
+
         }
+
 
         const T & operator* () const {
             return Retrieve();
@@ -48,6 +50,17 @@ public:
         ConstIterator operator ++(int) {
             ConstIterator old = *this;
             ++( *this);
+            return old;
+        }
+
+        ConstIterator & operator --() {
+            current_ = current_ -> prev;
+            return current_;
+        }
+
+        ConstIterator operator --(int) {
+            ConstIterator old = *this;
+            --(*this);
             return old;
         }
 
@@ -66,19 +79,19 @@ public:
         T & Retrieve() const {
             return current_->data;
         }
-
-        ConstIterator( const List<T>& lst, Node *p)
-        : list_(lst), current_(p) {
+        ConstIterator(List<T>& lst, Node *p)
+                : list_{&lst}, current_{p} {
             // Empty
         }
 
         bool AssertIsValid() const {
-            if ((list_ == nullptr) || (current_ == nullptr) || (current_ = list_->head_)) {
-                std::cout << "Iterator out of Bound" << std::endl;
+            if (current_ == nullptr || list_ == nullptr || current_ == list_->head_) {
+                std::cout << "Iterator Out of Bound" << std::endl;
                 return false;
             }
             return true;
         }
+
 
         friend class List<T>;
     };
@@ -86,8 +99,9 @@ public:
     class Iterator : public ConstIterator
     {
     public:
-        Iterator()
-        {};
+        Iterator()  {
+
+        };
 
         T & operator *() {
             return ConstIterator::Retrieve();
@@ -108,9 +122,20 @@ public:
             return old;
         }
 
+        Iterator & operator --() {
+            this->current_ = this->current_->prev;
+            return *this;
+        }
+
+        Iterator operator --(int) {
+            Iterator old = *this;
+            --(*this);
+            return old;
+        }
+
 
     protected:
-        Iterator(Node *p) : ConstIterator(p) {
+        Iterator(List<T> &lst, Node *p) : ConstIterator(lst, p) {
             // Empty
         }
 
@@ -132,19 +157,19 @@ public:
     List &operator = (const List &rhs);
 
     // move constructor
-    List(List &&rhs);
+    List(List &&rhs) noexcept ;
 
     // move assignment
-    List &operator = (List &&rhs);
+    List &operator = (List &&rhs) noexcept ;
 
     // -----------------------------------------------------------------------
     // Get the first element
-    Iterator GetBegin();
-    ConstIterator GetBegin() const;
+    Iterator begin();
+    ConstIterator begin() const;
 
     // Get the last element
-    Iterator GetTail();
-    ConstIterator GetTail() const;
+    Iterator end();
+    ConstIterator end() const;
 
     // Get Attributions
     int Size();
