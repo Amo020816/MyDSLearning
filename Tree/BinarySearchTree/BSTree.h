@@ -5,6 +5,7 @@
 #ifndef MYDSLEARNING_BSTREE_H
 #define MYDSLEARNING_BSTREE_H
 
+#include <iostream>
 #include <utility>
 
 // type CT means comparable types
@@ -12,7 +13,44 @@ template<typename CT>
 class BinarySearchTree {
 public:
 
-    BinarySearchTree();
+    BinarySearchTree()
+    : root_(nullptr) {
+        // empty
+    }
+
+    /**
+     * Copy constructor */
+    BinarySearchTree( const BinarySearchTree & rhs)
+    : root_(nullptr) {
+        root_ = clone(rhs.root_);
+    }
+
+    /**
+     * Move constructor*/
+    BinarySearchTree( BinarySearchTree && rhs)
+    : root_(rhs.root_) {
+        rhs.root_ = nullptr;
+    }
+
+    /**
+     * Copy assignment
+     * */
+    BinarySearchTree & operator =(const BinarySearchTree & rhs) {
+        BinarySearchTree copy = rhs;
+        std::swap(copy, *this);
+        return *this;
+    }
+
+    /**
+     * Move assignment
+     * */
+     BinarySearchTree & operator =(BinarySearchTree && rhs) {
+         std::swap(rhs.root_, root_);
+         return *this;
+     }
+
+
+
 
 private:
     struct BinaryNode{
@@ -137,8 +175,39 @@ private:
         }
     }
 
-    /***/
-    void makeEmpty()
+    /**
+     * Internal method to print subtree in order
+     * out is output stream.
+     * x is the node roots subtree. */
+     void printTree(std::ostream & out, BinaryNode * t) {
+        if (t == nullptr)
+            return;
+        printTree(out, t->left);
+        out << t->data << ' ';
+        printTree(out, t->right);
+     }
+
+    /**
+     * Internal method to make subtree empty.
+     * t is the node roots subtree. */
+    void makeEmpty( BinaryNode * t) {
+        if (t == nullptr)
+            return;
+        makeEmpty(t->left);
+        makeEmpty(t->right);
+        delete t;
+        t = nullptr;
+    }
+
+    /**
+     * Internal method to clone a subtree
+     * t is the node roots subtree.
+     * */
+     BinaryNode * clone(BinaryNode * t) {
+        if (t == nullptr)
+            return;
+        else return new BinaryNode{t->data , clone(t->left), clone(t->right)};
+     }
 };
 
 
