@@ -19,18 +19,27 @@ public:
     }
 
     /**
-     * Copy constructor */
+     * Copy constructor
+     * */
     BinarySearchTree( const BinarySearchTree & rhs)
     : root_(nullptr) {
         root_ = clone(rhs.root_);
     }
 
     /**
-     * Move constructor*/
+     * Move constructor
+     * */
     BinarySearchTree( BinarySearchTree && rhs)
     : root_(rhs.root_) {
         rhs.root_ = nullptr;
     }
+
+    /**
+     * destructor
+     */
+     ~BinarySearchTree() {
+        makeEmpty();
+     }
 
     /**
      * Copy assignment
@@ -46,8 +55,49 @@ public:
      * */
      BinarySearchTree & operator =(BinarySearchTree && rhs) {
          std::swap(rhs.root_, root_);
+         rhs.makeEmpty();
+         rhs.root_ = nullptr;
          return *this;
      }
+
+     /**
+      * Find the smallest element in the tree.
+      * */
+      const CT & findMin() const {
+          if (root_ == nullptr) {
+              // throw exception
+              std::cout << "root_ is null" << std::endl;
+              return;
+          }
+          return findMin(root_) -> data;
+      }
+
+      /**
+       * Find the largest element in the tree
+       */
+      const CT & findMax() const {
+          if (root_ == nullptr) {
+              // throw exception
+              std::cout << "root_ is null\n";
+              return;
+          }
+          return findMax(root_) -> data;
+      }
+
+      /**
+       * Return true if x is found in the tree
+       */
+       bool contain(const CT & x) const {
+          return contain(x, root_);
+       }
+
+      /**
+       * Make the tree empty
+       */
+       void makeEmpty() {
+          makeEmpty(root_);
+       }
+
 
 
 
