@@ -20,6 +20,8 @@ int main(){
         std::cout << item << ' ';
     }
 
+    List<int> lst2 = list1;
+
     std::cout << std::endl;
 
     list1.PopBack();

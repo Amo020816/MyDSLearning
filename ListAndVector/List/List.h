@@ -2,6 +2,14 @@
 // Created by Amo on 2022/9/26.
 //
 
+
+
+/**
+ * @Alert
+ * There are some bugs in DLList \n
+ * TODO:Rewrite the DLList
+ */
+
 #ifndef LIST_H
 #define LIST_H
 #include <utility>
@@ -44,7 +52,7 @@ public:
 
         ConstIterator & operator ++() {
             current_ = current_ -> next;
-            return current_;
+            return *this;
         }
 
         ConstIterator operator ++(int) {
