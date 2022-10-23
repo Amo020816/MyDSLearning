@@ -2,7 +2,6 @@
 // Created by Amo on 2022/10/21.
 //
 
-
 #ifndef LAB1_SLLIST_H
 #define LAB1_SLLIST_H
 
@@ -167,12 +166,15 @@ public:
     }
 
     SLList & operator = (const SLList & rhs) {
-        if (rhs == this) {
+        if (&rhs == this) {
             return *this;
         }
 
-        SLList copy = rhs;
-        std::swap( *this, copy);
+        this->clear();
+
+        for (auto & x : rhs)
+            this->pushBack(x);
+
         return *this;
     }
 
@@ -188,7 +190,7 @@ public:
         clear();
         head_ = std::exchange(rhs.head_, nullptr);
         tail_ = std::exchange(rhs.tail_, nullptr);
-        size_ = std::exchange(rhs.the_size_, 0);
+        size_ = std::exchange(rhs.size_, 0);
 
         return *this;
     }
@@ -342,7 +344,7 @@ public:
      * @return tail_->data
      */
     const T & back() const {
-        Iterator itr(this, tail_);
+        ConstIterator itr(this, tail_);
         itr.assertIsValid();
         return itr.current_->data;
     }
@@ -362,7 +364,7 @@ public:
      * @return begin().current_->data
      */
     const T & front() const {
-        Iterator itr = begin();
+        ConstIterator itr = begin();
         itr.assertIsValid();
         return itr.current_->data;
     }
