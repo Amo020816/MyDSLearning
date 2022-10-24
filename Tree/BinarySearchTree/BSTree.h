@@ -1,146 +1,176 @@
 //
-// Created by Amo on 2022/10/18.
+// Created by Amo on 2022/10/23.
 //
 
 #ifndef MYDSLEARNING_BSTREE_H
 #define MYDSLEARNING_BSTREE_H
 
-#include <iostream>
 #include <utility>
-
-// type CT means comparable types
+#include <iostream>
+// comparable type
 template<typename CT>
 class BinarySearchTree {
+
 public:
+    // interface
 
     BinarySearchTree()
     : root_(nullptr) {
         // empty
     }
 
-    /**
-     * Copy constructor
-     * */
+    ~BinarySearchTree() {
+        makeEmpty();
+        root_ = nullptr;
+    }
+
     BinarySearchTree( const BinarySearchTree & rhs)
     : root_(nullptr) {
         root_ = clone(rhs.root_);
     }
 
-    /**
-     * Move constructor
-     * */
-    BinarySearchTree( BinarySearchTree && rhs)
+    BinarySearchTree( BinarySearchTree && rhs) noexcept
     : root_(rhs.root_) {
         rhs.root_ = nullptr;
     }
 
-    /**
-     * destructor
-     */
-     ~BinarySearchTree() {
-        makeEmpty();
-     }
-
-    /**
-     * Copy assignment
-     * */
+    // Does it actually work?
     BinarySearchTree & operator =(const BinarySearchTree & rhs) {
+        if (&rhs == this)
+            return *this;
+
         BinarySearchTree copy = rhs;
-        std::swap(copy, *this);
+        std::swap(*this, copy);
+        return *this;
+    }
+
+    BinarySearchTree & operator =(BinarySearchTree && rhs) noexcept {
+        if (&rhs == this)
+            return *this;
+
+        makeEmpty();
+        root_ = std::exchange(rhs.root_, nullptr);
+
         return *this;
     }
 
     /**
-     * Move assignment
-     * */
-     BinarySearchTree & operator =(BinarySearchTree && rhs) {
-         std::swap(rhs.root_, root_);
-         rhs.makeEmpty();
-         rhs.root_ = nullptr;
-         return *this;
-     }
+     * Check if data is in BST
+     * @param data object search for
+     * @return true if data is found
+     */
+    bool isContain(const CT & data) const {
+        return isContain(data, root_);
+    }
 
-     /**
-      * Find the smallest element in the tree.
-      * */
-      const CT & findMin() const {
-          if (root_ == nullptr) {
-              // throw exception
-              std::cout << "root_ is null" << std::endl;
-              return;
-          }
-          return findMin(root_) -> data;
-      }
+    /**
+     * Find the minimum of the BST
+     * @return a constant reference of minimum
+     */
+    const CT & findMin() const {
+        return findMin(root_)->data;
+    }
 
-      /**
-       * Find the largest element in the tree
-       */
-      const CT & findMax() const {
-          if (root_ == nullptr) {
-              // throw exception
-              std::cout << "root_ is null\n";
-              return;
-          }
-          return findMax(root_) -> data;
-      }
+    /**
+     * Find the maximum of BST
+     * @return a constant reference of maximum
+     */
+    const CT & findMax() const {
+        return findMax(root_)->data;
+    }
 
-      /**
-       * Return true if x is found in the tree
-       */
-       bool contain(const CT & x) const {
-          return contain(x, root_);
-       }
+    /**
+     * Insert data into BST
+     * @param data the object to insert
+     */
+    void insert(const CT & data) {
+        insert(data, root_);
+    }
 
-      /**
-       * Make the tree empty
-       */
-       void makeEmpty() {
-          makeEmpty(root_);
-       }
+    /**
+     * Insert data into BST
+     * @param data the object to insert with move
+     */
+    void insert(CT && data) {
+        insert(std::move(data), root_);
+    }
 
+    /**
+     * remove data from BST
+     * @param data the object desired to remove
+     */
+    void remove(const CT & data) {
+        remove(data, root_);
+    }
 
+    /**
+     * print BST in order
+     * @param out an ostream
+     */
+    void print(std::ostream & out) {
+        print(out, root_);
+    }
 
+    /**
+     * Check if this BST is empty
+     * @return true if root_ points to null
+     */
+    bool isEmpty() {
+        return root_ == nullptr;
+    }
 
+    /**
+     *  Make this BST empty
+     */
+    void makeEmpty() {
+        makeEmpty(root_);
+    }
 
 private:
-    struct BinaryNode{
+    /**
+     * Basic node structure of BST
+     */
+    struct BinaryNode {
         CT data;
-        BinaryNode* left;
-        BinaryNode* right;
+        BinaryNode * left;
+        BinaryNode * right;
 
-        BinaryNode(const CT& d, BinaryNode* l, BinaryNode* r)
-        : data(d), left(l), right(r) {
+        BinaryNode( CT & d, BinaryNode * l, BinaryNode * r)
+                : data(d), left(l), right(r) {
             // empty
         }
 
-        BinaryNode(CT&& d, BinaryNode* l, BinaryNode* r)
-        : data(std::move(d), left(l), right(r)) {
+        BinaryNode( CT && d, BinaryNode * l, BinaryNode * r) noexcept
+                : data(std::move(d)), left(l), right(r) {
             // empty
         }
     };
 
-    BinaryNode* root_;
-
+private:
+    // Internal functions
     /**
-     * Internal method to test if an item is in subtree.
-     * x is item to search for.
-     * t is the node roots the subtree. */
-    bool contain( const CT& x, BinaryNode *t) const {
+     * Internal method to Judge whether x is in subtree t
+     * @param x the item to search for
+     * @param t node roots the subtree
+     * @return true if x is in subtree
+     */
+    bool isContain(const CT & x, BinaryNode * t) const {
         if (t == nullptr)
             return false;
         else if (x < t->data)
-            return contain(x, t->left);
-        else if (t->data < x)
-            return contain(x, t->right);
-        else
+            isContain(x, t->left);
+        else if (x > t->data)
+            isContain(x, t->right);
+        else // found
             return true;
     }
 
     /**
-     * Internal method to find the smallest item in a subtree t.
-     * Return node containing the smallest item.
-     * recursively. */
-    BinaryNode * findMin(BinaryNode * t) const{
+     * Internal method to Find the minimum of subtree
+     * @param t node roots subtree
+     * @return Minimum BinaryNode
+     */
+    BinaryNode * findMin(BinaryNode * t) const {
         if (t == nullptr)
             return nullptr;
         if (t->left == nullptr)
@@ -150,97 +180,80 @@ private:
     }
 
     /**
-     * Internal method to find the largest item in a subtree t.
-     * Return node containing the largest item.
-     * recursively. */
-     BinaryNode * findMax(BinaryNode * t) const {
-         if (t == nullptr)
-             return nullptr;
-         if (t->right == nullptr)
-             return t;
-         else
-             return findMax(t->right);
-     }
-
-     /* The non-recursively version of findMin:
-
-     BinaryNode * findMinWithNonRecursive(BinaryNode * t) const {
-         if (t != nullptr)
-             for (;t->left != nullptr;)
-                 t = t->left;
-         return t;
-     }
-    */
-
-    /**
-     * Internal method to insert an item x into a subtree t.
-     * x is the item to insert.
-     * t is the node roots the subtree.
-     * Recursively*/
-    void insert( const CT& x, BinaryNode * & t) {
+     * Internal method to Find the maximum of subtree
+     * @param t node roots subtree
+     * @return Maximum BinaryNode
+     */
+    BinaryNode * findMax(BinaryNode * t) const {
         if (t == nullptr)
-            t = new BinaryNode(x, nullptr, nullptr);
-        if (x < t->data)
-            insert(x, t->left);
-        else if (x > t->data)
-            insert(x, t->right);
-        else ; // Already existed.
+            return nullptr;
+        if (t->right == nullptr)
+            return t;
+        else
+            return findMax(t->right);
     }
 
     /**
-     * Internal method to insert an item into a subtree t.
-     * x is the item to insert by moving.
-     * t is the node roots the subtree.
-     * Recursively */
-    void insert(CT &&x, BinaryNode * & t) {
-        if (t == nullptr)
-            t = new BinaryNode(std::move(x), nullptr, nullptr);
-        if (x < t->data)
-            insert(std::move(x), t->left);
-        else if (x > t->data)
-            insert(std::move(x), t->right);
-        else ; // Already existed.
+     * Internal method to insert data into subtree
+     * @param data the object to insert
+     * @param t node roots subtree
+     */
+    void insert(const CT & data, BinaryNode * & t) {
+        if (t == nullptr) {
+            t = new BinaryNode(data, nullptr, nullptr);
+            return;
+        }
+        if (data < t->data)
+            insert(data, t->left);
+        else if (data > t->data)
+            insert(data, t->right);
     }
 
     /**
-     * Internal method to remove an item from a subtree.
-     * x is the item to remove.
-     * t is the node roots the subtree.
-     * Recursively */
-    void remove(const CT& x, BinaryNode * & t) {
-        if (t == nullptr)
-            return;     // Item not found, do nothing.
-        if (x < t->data)
-            remove(x, t->left);
-        else if (x > t->data)
-            remove(x, t->right);
-        else if (t->left != nullptr && t->right != nullptr) {
-            t->data = findMin(t->right);
+     * Internal method to insert data into subtree
+     * @param data the object to insert with move
+     * @param t node roots subtree
+     */
+    void insert(CT && data, BinaryNode * & t) {
+        if (t == nullptr) {
+            t = new BinaryNode(std::move(data), nullptr, nullptr);
+            return;
+        }
+        if (data < t->data)
+            insert(std::move(data), t->left);
+        else if (data > t->data)
+            insert(std::move(data), t->right);
+    }
+
+    /**
+     * Internal method to remove data from subtree
+     * @param data the object to remove
+     * @param t node roots subtree
+     */
+    void remove(const CT & data, BinaryNode * & t) {
+        if (t == nullptr)   // data not found
+            return;
+        if (data < t->data)
+            remove(data, t->left);
+        else if (data > t->data)
+            remove(data, t->right);
+        else // data found, prepare to remove
+        if (t->left != nullptr && t->right != nullptr) {
+            t->data = findMin(t->right)->data;
             remove(t->data, t->right);
         }
         else {
-            BinaryNode *old_node = t;
-            t = (t->left == nullptr)? t->right: t->left;
+            BinaryNode * old_node = t;
+            t = t->left == nullptr? t->right: t->left;
             delete old_node;
         }
     }
 
     /**
-     * Internal method to print subtree in order
-     * out is output stream.
-     * x is the node roots subtree. */
-     void printTree(std::ostream & out, BinaryNode * t) {
-        if (t == nullptr)
-            return;
-        printTree(out, t->left);
-        out << t->data << ' ';
-        printTree(out, t->right);
-     }
-
-    /**
-     * Internal method to make subtree empty.
-     * t is the node roots subtree. */
-    void makeEmpty( BinaryNode * t) {
+     * Internal method to make a subtree empty
+     * @param t node roots subtree
+     */
+    void makeEmpty(BinaryNode * & t) {
         if (t == nullptr)
             return;
         makeEmpty(t->left);
@@ -250,15 +263,33 @@ private:
     }
 
     /**
-     * Internal method to clone a subtree
-     * t is the node roots subtree.
-     * */
-     BinaryNode * clone(BinaryNode * t) {
+     * Internal method to print subtree in order
+     * @param out out stream
+     * @param t node roots subtree
+     */
+    void print( std::ostream & out, BinaryNode * t) {
         if (t == nullptr)
             return;
-        else return new BinaryNode{t->data , clone(t->left), clone(t->right)};
-     }
-};
+        print(out, t->left);
+        out << t->data << ' ';
+        print(out, t->right);
+    }
 
+    /**
+     * Internal method to clone subtree
+     * @param t node roots subtree
+     * @return new node roots cloned subtree
+     */
+    BinaryNode * clone(BinaryNode * t) {
+        if (t == nullptr)
+            return nullptr;
+        else
+            return new BinaryNode(t->data, clone(t->left), clone(t->right));
+    }
+    
+private:
+    // Data members
+    BinaryNode * root_;
+};
 
 #endif //MYDSLEARNING_BSTREE_H
