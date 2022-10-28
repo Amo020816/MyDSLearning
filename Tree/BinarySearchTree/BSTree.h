@@ -146,7 +146,7 @@ private:
         }
     };
 
-private:
+protected:
     // Internal functions
     /**
      * Internal method to Judge whether x is in subtree t
@@ -286,8 +286,8 @@ private:
         else
             return new BinaryNode(t->data, clone(t->left), clone(t->right));
     }
-    
-private:
+
+protected:
     // Data members
     BinaryNode * root_;
 };

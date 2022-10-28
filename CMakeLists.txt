@@ -14,4 +14,5 @@ add_executable(MyDSLearning
         ${LIST}
         ${VECTOR}
         ${BST}
-        ${AvlTree})
+        ${AvlTree}
+        ${UTree})
