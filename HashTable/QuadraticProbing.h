@@ -31,7 +31,7 @@ public:
             entry.info = EMPTY;
     }
 
-    bool contains(const HashObj & obj) {
+    bool contains(const HashObj & obj) const {
         return isActive(findPos(obj));
     }
 
@@ -116,7 +116,7 @@ private:
     int size_;
 
     /** Return if the HashEntry at pos is ACTIVE. */
-    bool isActive( int pos) {
+    bool isActive( int pos) const {
         return array_[pos].info == ACTIVE;
     }
     /**

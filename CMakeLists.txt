@@ -9,7 +9,8 @@ include_directories(ListAndVector)
 #set(AvlTree Tree/AvlTree/AvlTreeTest.cpp)
 #set(LIST ListAndVector/List/List.cpp ListAndVector/List/List.inl)
 #set(VECTOR ListAndVector/Vector/Vector.cpp)
-set(HASH HashTable/QuadraticProbingTest.cpp)
+#set(HASH HashTable/QuadraticProbingTest.cpp)
+set(SPELLCHECKER HashTable/SpellChecker.cpp HashTable/SpellCheckerTest.cpp)
 
 add_executable(MyDSLearning
         ${LIST}
@@ -17,4 +18,5 @@ add_executable(MyDSLearning
         ${BST}
         ${AvlTree}
         ${UTree}
-        ${HASH})
+        ${HASH}
+        ${SPELLCHECKER})
