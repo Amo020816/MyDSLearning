@@ -11,18 +11,21 @@ int main() {
 
     vector<int> vec;
 
-    int n;
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        int input;
-        cin >> input;
-        vec.push_back(input);
-    }
+    vec.push_back(9);
+    vec.push_back(8);
+    vec.push_back(7);
+    vec.push_back(6);
+    vec.push_back(5);
+    vec.push_back(4);
 
     mergeSort(vec);
 
-    for (auto & x : vec)
-        cout << x << " ";
+    std::cout << "Checking.... No more output means success.\n";
+    for (int i = 0; i < vec.size() - 1; i++)
+        if (vec[i] > vec[i + 1]) {
+            std::cout << "Check failed\n";
+            break;
+        }
 
     return 0;
 }
