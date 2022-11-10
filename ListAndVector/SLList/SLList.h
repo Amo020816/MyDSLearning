@@ -421,8 +421,7 @@ public:
 
 
 private:
-    /*
-     * Some internal functions.*/
+    // Some internal functions.
 
     /**
      * Find the previous node of itr.current_
