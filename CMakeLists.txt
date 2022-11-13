@@ -11,9 +11,9 @@ include_directories(ListAndVector)
 #set(VECTOR ListAndVector/Vector/Vector.cpp)
 #set(HASH HashTable/QuadraticProbingTest.cpp)
 #set(SPELLCHECKER HashTable/SpellChecker.cpp HashTable/SpellCheckerTest.cpp)
-set(SORTING Sort/TestSorting.cpp)
+#set(SORTING Sort/TestSorting.cpp)
 
-add_executable(MyDSLearning
+add_executable(MyDSLearning main.cpp
         ${LIST}
         ${VECTOR}
         ${BST}
