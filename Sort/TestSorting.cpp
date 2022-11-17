@@ -3,11 +3,12 @@
 //
 
 #include "MergeSorting.h"
+#include "InsertSort.h"
 #include <iostream>
 #include <vector>
 
 using namespace std;
-int main() {
+void sortTest() {
 
     vector<int> vec;
 
@@ -18,14 +19,13 @@ int main() {
     vec.push_back(5);
     vec.push_back(4);
 
-    mergeSort(vec);
+    insertSort(vec);
 
-    std::cout << "Checking.... No more output means success.\n";
+    std::cout << "Checking.... No more outputs means success.\n";
     for (int i = 0; i < vec.size() - 1; i++)
         if (vec[i] > vec[i + 1]) {
             std::cout << "Check failed\n";
             break;
         }
 
-    return 0;
 }

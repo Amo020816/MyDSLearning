@@ -1,13 +1,11 @@
 #include <iostream>
-#include "Heap/BinaryHeapTimeTest.cpp"
+#include "Sort/TestSorting.cpp"
 
 using namespace std;
 
 
 int main()
 {
-    heapSortedInputTest();
-    heapReverseOrderedTest();
-    heapRandomInputTest();
+    sortTest();
     return 0;
 }

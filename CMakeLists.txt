@@ -3,12 +3,12 @@ project(MyDSLearning)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(ListAndVector)
+include_directories(List)
 
 #set(BST Tree/BinarySearchTree/BSTTest.cpp)
 #set(AvlTree Tree/AvlTree/AvlTreeTest.cpp)
-#set(LIST ListAndVector/List/List.cpp ListAndVector/List/List.inl)
-#set(VECTOR ListAndVector/Vector/Vector.cpp)
+#set(LIST List/List/List.cpp List/List/List.inl)
+#set(VECTOR List/Vector/Vector.cpp)
 #set(HASH HashTable/QuadraticProbingTest.cpp)
 #set(SPELLCHECKER HashTable/SpellChecker.cpp HashTable/SpellCheckerTest.cpp)
 #set(SORTING Sort/TestSorting.cpp)

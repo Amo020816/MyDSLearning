@@ -12,7 +12,7 @@ template<typename T>
 void merge(std::vector<T> & array, std::vector<T> & tempArray, size_t left, size_t right, size_t rightEnd) {
     size_t leftEnd = right - 1;
     size_t tempPos = left;
-    int numOfElements = rightEnd - left + 1;
+    size_t numOfElements = rightEnd - left + 1;
 
     size_t leftPos, rightPos;
     for (leftPos = left, rightPos = right; leftPos <= leftEnd && rightPos <= rightEnd;) {
@@ -52,7 +52,6 @@ void mergeSort(std::vector<T> & array, std::vector<T> & tempArray, size_t left, 
 template<typename T>
 void mergeSort( std::vector<T> & array) {
     std::vector<T> tempArray(array.size());
-
     mergeSort(array, tempArray, 0, array.size() - 1);
 }
 
