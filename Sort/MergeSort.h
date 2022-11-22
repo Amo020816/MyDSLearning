@@ -17,12 +17,12 @@ void merge(const Iterator & arr, const tempIterator & temp, Comparator cmp,
 
     for (;leftPos <= leftEnd && rightPos <= rightEnd;) {
         if (cmp(*(arr + leftPos), *(arr + rightPos))) {
-            // The element at leftPos is less than rightPos.
+            // Comparator return true.
             *(temp + tempPos) = *(arr + leftPos);
             tempPos++;
             leftPos++;
         } else {
-            // The element at rightPos is less than leftPos.
+            // Comparator return false.
             *(temp + tempPos) = *(arr + rightPos);
             tempPos++;
             rightPos++;
@@ -64,7 +64,12 @@ void mergeSort(const Iterator & arr, const tempIterator & temp, Comparator cmp,
     }
 }
 
-
+/**
+ * @brief Merge sort an array, inplace the result.
+ * @param begin Begin iterator of the sort array.
+ * @param end End iterator of the sort array.
+ * @param cmp Comparator function.
+ */
 template<typename Iterator, typename Comparator>
 void mergeSort(const Iterator & begin, const Iterator & end, Comparator cmp) {
     const size_t size = end - begin - 1;
@@ -73,6 +78,11 @@ void mergeSort(const Iterator & begin, const Iterator & end, Comparator cmp) {
     mergeSort(begin, temp, cmp, 0, size);
 }
 
+/**
+ * @brief Merge sort an array with default less than comparator, inplace the result.
+ * @param begin Begin iterator of the sort array.
+ * @param end End iterator of the sort array.
+ */
 template<typename Iterator>
 void mergeSort(const Iterator & begin, const Iterator & end) {
     mergeSort(begin, end, std::less<decltype(*begin)>{});

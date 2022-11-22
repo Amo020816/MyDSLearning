@@ -21,13 +21,12 @@ void sortTest() {
     }
 
     std::cout << std::endl;
+    std::less<> defaultComparator;
 
     std::cout << "Checking.... No more outputs means success.\n";
     for (int i = 0; i < vec.size() - 1; i++)
-        if (vec[i] > vec[i + 1]) {
+        if (!defaultComparator(vec[i], vec[i + 1])) {
             std::cout << "Check failed\n";
             break;
         }
-
-
 }
