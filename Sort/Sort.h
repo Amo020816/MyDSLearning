@@ -7,5 +7,8 @@
 
 #include "InsertionSort.h"
 #include "MergeSort.h"
+#include "QuickSort.h"
+#include "HeapSort.h"
+#include "ShellSort.h"
 
 #endif //MYDSLEARNING_SORT_H

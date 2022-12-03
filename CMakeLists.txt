@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(List)
 
+add_subdirectory(Google_tests)
+
 #set(BST Tree/BinarySearchTree/BSTTest.cpp)
 #set(AvlTree Tree/AvlTree/AvlTreeTest.cpp)
 #set(LIST List/List/List.cpp List/List/List.inl)
@@ -12,6 +14,7 @@ include_directories(List)
 #set(HASH HashTable/QuadraticProbingTest.cpp)
 #set(SPELLCHECKER HashTable/SpellChecker.cpp HashTable/SpellCheckerTest.cpp)
 #set(SORTING Sort/TestSorting.cpp)
+#set(QuickUnion Union/QuickUnion.cpp)
 
 add_executable(MyDSLearning main.cpp
         ${LIST}
@@ -21,4 +24,5 @@ add_executable(MyDSLearning main.cpp
         ${UTree}
         ${HASH}
         ${SPELLCHECKER}
-        ${SORTING})
+        ${SORTING}
+        ${QuickUnion})

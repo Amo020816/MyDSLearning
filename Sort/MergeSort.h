@@ -4,7 +4,7 @@
 
 #ifndef MYDSLEARNING_MERGESORT_H
 #define MYDSLEARNING_MERGESORT_H
-#include <vector>
+#include <functional>
 #include <cstddef>
 #include <utility>
 
@@ -18,31 +18,31 @@ void merge(const Iterator & arr, const tempIterator & temp, Comparator cmp,
     for (;leftPos <= leftEnd && rightPos <= rightEnd;) {
         if (cmp(*(arr + leftPos), *(arr + rightPos))) {
             // Comparator return true.
-            *(temp + tempPos) = *(arr + leftPos);
+            *(temp + tempPos) = std::move(*(arr + leftPos));
             tempPos++;
             leftPos++;
         } else {
             // Comparator return false.
-            *(temp + tempPos) = *(arr + rightPos);
+            *(temp + tempPos) = std::move(*(arr + rightPos));
             tempPos++;
             rightPos++;
         }
     }
 
     for (;leftPos <= leftEnd;) {
-        *(temp + tempPos) = *(arr + leftPos);
+        *(temp + tempPos) = std::move(*(arr + leftPos));
         tempPos++;
         leftPos++;
     }
 
     for (;rightPos <= rightEnd;) {
-        *(temp + tempPos) = *(arr + rightPos);
+        *(temp + tempPos) = std::move(*(arr + rightPos));
         tempPos++;
         rightPos++;
     }
 
     for (int i = 0; i < numberElements; i++, rightEnd--)
-        *(arr + rightEnd) = *(temp + rightEnd);
+        *(arr + rightEnd) = std::move(*(temp + rightEnd));
 }
 
 /**
@@ -73,7 +73,6 @@ void mergeSort(const Iterator & arr, const tempIterator & temp, Comparator cmp,
 template<typename Iterator, typename Comparator>
 void mergeSort(const Iterator & begin, const Iterator & end, Comparator cmp) {
     const size_t size = end - begin - 1;
-    //std::vector<typename std::remove_reference<decltype(*begin)>::type> temp(size + 10);
     auto * temp = new typename std::remove_reference<decltype(*begin)>::type[size + 4];
     mergeSort(begin, temp, cmp, 0, size);
 }

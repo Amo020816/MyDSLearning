@@ -4,7 +4,7 @@
 
 #ifndef MYDSLEARNING_INSERTIONSORT_H
 #define MYDSLEARNING_INSERTIONSORT_H
-#include <vector>
+#include <functional>
 #include <utility>
 
 template<typename iterator, typename comparator>

@@ -52,7 +52,7 @@ public:
             return;
 
         array_[1] = std::move(array_[size_ - 1]);
-         percolateDown(1);
+        percolateDown(1);
 
         size_--;
      }
