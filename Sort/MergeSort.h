@@ -19,26 +19,26 @@ void merge(const Iterator & arr, const tempIterator & temp, Comparator cmp,
         if (cmp(*(arr + leftPos), *(arr + rightPos))) {
             // Comparator return true.
             *(temp + tempPos) = std::move(*(arr + leftPos));
-            tempPos++;
-            leftPos++;
+            ++tempPos;
+            ++leftPos;
         } else {
             // Comparator return false.
             *(temp + tempPos) = std::move(*(arr + rightPos));
-            tempPos++;
-            rightPos++;
+            ++tempPos;
+            ++rightPos;
         }
     }
 
     for (;leftPos <= leftEnd;) {
         *(temp + tempPos) = std::move(*(arr + leftPos));
-        tempPos++;
-        leftPos++;
+        ++tempPos;
+        ++leftPos;
     }
 
     for (;rightPos <= rightEnd;) {
         *(temp + tempPos) = std::move(*(arr + rightPos));
-        tempPos++;
-        rightPos++;
+        ++tempPos;
+        ++rightPos;
     }
 
     for (int i = 0; i < numberElements; i++, rightEnd--)
